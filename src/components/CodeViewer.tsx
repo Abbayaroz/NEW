@@ -24,7 +24,7 @@ export const CodeViewer: React.FC = () => {
         <div>
           <h2 className="text-sm font-extrabold uppercase tracking-widest text-emerald-400 flex items-center space-x-1.5">
             <Terminal className="w-4 h-4" />
-            <span>FUDMA Lecture Reminder Native Android Source Project</span>
+            <span>IKCOE Lecture Reminder Native Android Source Project</span>
           </h2>
           <p className="text-slate-400 text-xs mt-1">Ready-to-build source files and Android Studio project compiler guides</p>
         </div>
@@ -166,8 +166,8 @@ export const CodeViewer: React.FC = () => {
                   Open <strong>Android Studio</strong>, select <strong>File &gt; New &gt; New Project</strong>, and select the <strong>Empty Activity</strong> template. Set the project details as follows:
                 </p>
                 <ul className="list-disc list-inside text-[11px] text-slate-400 pl-2 space-y-1 mt-1.5 font-medium">
-                  <li>Name: <strong className="text-white">FUDMA Lecture Reminder</strong></li>
-                  <li>Package name: <strong className="text-emerald-400 font-mono">com.fudma.lecturereminder</strong></li>
+                  <li>Name: <strong className="text-white">IKCOE Lecture Reminder</strong></li>
+                  <li>Package name: <strong className="text-emerald-400 font-mono">com.ikcoe.lecturereminder</strong></li>
                   <li>Language: <strong className="text-white">Kotlin</strong></li>
                   <li>Build configuration language: <strong className="text-white">Kotlin DSL (build.gradle.kts)</strong></li>
                   <li>Minimum SDK: <strong className="text-white">API 26: Android 8.0 (Oreo)</strong></li>
@@ -200,7 +200,7 @@ export const CodeViewer: React.FC = () => {
               <div className="space-y-1 text-xs">
                 <h4 className="font-bold text-slate-200">Replicate the Code Directories</h4>
                 <p className="text-slate-400 leading-relaxed">
-                  Create the necessary packages in your <code className="text-emerald-400 bg-slate-950 px-1 py-0.5 rounded font-mono text-[11px]">app/src/main/java/com/fudma/lecturereminder</code> folder:
+                  Create the necessary packages in your <code className="text-emerald-400 bg-slate-950 px-1 py-0.5 rounded font-mono text-[11px]">app/src/main/java/com/ikcoe/lecturereminder</code> folder:
                 </p>
                 <ul className="list-disc list-inside text-[11px] text-slate-400 pl-2 space-y-1 mt-1 font-medium">
                   <li>Create folder <strong className="text-white">data/entity</strong>, <strong className="text-white">data/dao</strong>, and <strong className="text-white">data/database</strong> and copy-paste the Room entities, DAOs, and Database codes.</li>
@@ -229,8 +229,8 @@ export const CodeViewer: React.FC = () => {
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <span className="text-slate-400">Need help with custom FUDMA API integrations?</span>
-            <span className="text-emerald-400 underline">FUDMA Computer Science Dept</span>
+            <span className="text-slate-400">Need help with custom IKCOE API integrations?</span>
+            <span className="text-emerald-400 underline">IKCOE Computer Science Dept</span>
           </div>
 
         </div>

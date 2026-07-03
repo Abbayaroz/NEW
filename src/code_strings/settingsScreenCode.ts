@@ -1,4 +1,4 @@
-export const settingsScreenCode = `package com.fudma.lecturereminder.ui.screens
+export const settingsScreenCode = `package com.ikcoe.lecturereminder.ui.screens
 
 import android.content.Context
 import android.content.Intent
@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fudma.lecturereminder.data.database.AppDatabase
-import com.fudma.lecturereminder.receiver.AlarmReceiver
+import com.ikcoe.lecturereminder.data.database.AppDatabase
+import com.ikcoe.lecturereminder.receiver.AlarmReceiver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

@@ -38,7 +38,7 @@ export const SAMPLE_LECTURES: Lecture[] = [
 
 export const DEFAULT_PROFILE: StudentProfile = {
   fullName: 'Bashir Abba Yaroz',
-  matricNo: 'FUDMA/CSC/22/0142',
+  matricNo: 'IKCOE/CSC/22/0142',
   department: 'Computer Science',
   faculty: 'Physical Sciences',
   level: '300 Level',

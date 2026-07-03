@@ -1,4 +1,4 @@
-export const profileScreenCode = `package com.fudma.lecturereminder.ui.screens
+export const profileScreenCode = `package com.ikcoe.lecturereminder.ui.screens
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
@@ -31,7 +31,7 @@ fun ProfileScreen(navController: NavController) {
     val prefs = remember { context.getSharedPreferences("student_profile", Context.MODE_PRIVATE) }
     
     var fullName by remember { mutableStateOf(prefs.getString("profile_full_name", "Bashir Abba Yaroz") ?: "Bashir Abba Yaroz") }
-    var matricNo by remember { mutableStateOf(prefs.getString("profile_matric_no", "FUDMA/CSC/22/0142") ?: "FUDMA/CSC/22/0142") }
+    var matricNo by remember { mutableStateOf(prefs.getString("profile_matric_no", "IKCOE/CSC/22/0142") ?: "IKCOE/CSC/22/0142") }
     var department by remember { mutableStateOf(prefs.getString("profile_department", "Computer Science") ?: "Computer Science") }
     var faculty by remember { mutableStateOf(prefs.getString("profile_faculty", "Physical Sciences") ?: "Physical Sciences") }
     var level by remember { mutableStateOf(prefs.getString("profile_level", "300 Level") ?: "300 Level") }
@@ -316,9 +316,9 @@ fun ProfileScreen(navController: NavController) {
                                     }
                                 }
                                 Spacer(modifier = Modifier.height(2.dp))
-                                val matricSuffix = if (matricNo.contains("/")) matricNo.split("/").last() else "FUDMA"
+                                val matricSuffix = if (matricNo.contains("/")) matricNo.split("/").last() else "IKCOE"
                                 Text(
-                                    text = "FUDMA-\\\${matricSuffix}",
+                                    text = "IKCOE-\\\${matricSuffix}",
                                     color = Color(0xFFA5D6A7),
                                     fontSize = 6.sp,
                                     fontFamily = FontFamily.Monospace,
@@ -374,7 +374,7 @@ fun ProfileScreen(navController: NavController) {
                         OutlinedTextField(
                             value = editMatricNo,
                             onValueChange = { editMatricNo = it.uppercase() },
-                            placeholder = { Text("FUDMA/CSC/22/0142") },
+                            placeholder = { Text("IKCOE/CSC/22/0142") },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true,
@@ -499,7 +499,7 @@ fun ProfileScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "FUDMA ATTENDANCE POLICY",
+                        text = "IKCOE ATTENDANCE POLICY",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary

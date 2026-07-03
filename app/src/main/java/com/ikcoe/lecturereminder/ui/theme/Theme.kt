@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder.ui.theme
+package com.ikcoe.lecturereminder.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -8,27 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = FudmaGreenSecondary,
-    secondary = FudmaGreenLight,
-    background = FudmaCharcoal,
+    primary = IkcoeGreenSecondary,
+    secondary = IkcoeGreenLight,
+    background = IkcoeCharcoal,
     surface = Color(0xFF111827),
-    onPrimary = FudmaWhite,
-    onBackground = FudmaWhite,
-    onSurface = FudmaWhite
+    onPrimary = IkcoeWhite,
+    onBackground = IkcoeWhite,
+    onSurface = IkcoeWhite
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = FudmaGreenPrimary,
-    secondary = FudmaGreenSecondary,
-    background = FudmaLightBg,
-    surface = FudmaWhite,
-    onPrimary = FudmaWhite,
-    onBackground = FudmaCharcoal,
-    onSurface = FudmaCharcoal
+    primary = IkcoeGreenPrimary,
+    secondary = IkcoeGreenSecondary,
+    background = IkcoeLightBg,
+    surface = IkcoeWhite,
+    onPrimary = IkcoeWhite,
+    onBackground = IkcoeCharcoal,
+    onSurface = IkcoeCharcoal
 )
 
 @Composable
-fun FUDMALectureReminderTheme(
+fun IKCOELectureReminderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

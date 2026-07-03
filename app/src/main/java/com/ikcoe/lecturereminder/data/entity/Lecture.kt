@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder.data.entity
+package com.ikcoe.lecturereminder.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

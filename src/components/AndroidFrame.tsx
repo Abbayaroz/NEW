@@ -11,22 +11,22 @@ import { Wifi, Battery, Home, ChevronLeft, Square, Bell, Play, Volume2, Shield, 
 export const AndroidFrame: React.FC = () => {
   // --- LOCAL PERSISTENT STATES ---
   const [profile, setProfile] = useState<StudentProfile>(() => {
-    const saved = localStorage.getItem('fudma_student_profile');
+    const saved = localStorage.getItem('ikcoe_student_profile');
     return saved ? JSON.parse(saved) : DEFAULT_PROFILE;
   });
 
   const [lectures, setLectures] = useState<Lecture[]>(() => {
-    const saved = localStorage.getItem('fudma_lectures_list');
+    const saved = localStorage.getItem('ikcoe_lectures_list');
     return saved ? JSON.parse(saved) : SAMPLE_LECTURES;
   });
 
   const [settings, setSettings] = useState<NotificationSettings>(() => {
-    const saved = localStorage.getItem('fudma_notification_settings');
+    const saved = localStorage.getItem('ikcoe_notification_settings');
     return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
   });
 
   const [notifications, setNotifications] = useState<SimulatedNotification[]>(() => {
-    const saved = localStorage.getItem('fudma_notifications_history');
+    const saved = localStorage.getItem('ikcoe_notifications_history');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -50,19 +50,19 @@ export const AndroidFrame: React.FC = () => {
 
   // Save states to local storage on changes
   useEffect(() => {
-    localStorage.setItem('fudma_student_profile', JSON.stringify(profile));
+    localStorage.setItem('ikcoe_student_profile', JSON.stringify(profile));
   }, [profile]);
 
   useEffect(() => {
-    localStorage.setItem('fudma_lectures_list', JSON.stringify(lectures));
+    localStorage.setItem('ikcoe_lectures_list', JSON.stringify(lectures));
   }, [lectures]);
 
   useEffect(() => {
-    localStorage.setItem('fudma_notification_settings', JSON.stringify(settings));
+    localStorage.setItem('ikcoe_notification_settings', JSON.stringify(settings));
   }, [settings]);
 
   useEffect(() => {
-    localStorage.setItem('fudma_notifications_history', JSON.stringify(notifications));
+    localStorage.setItem('ikcoe_notifications_history', JSON.stringify(notifications));
   }, [notifications]);
 
   // --- ACTIONS & HANDLERS ---
@@ -198,7 +198,7 @@ export const AndroidFrame: React.FC = () => {
       {/* Simulation Banner Label */}
       <div className="flex items-center space-x-1.5 mb-3 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-extrabold shadow-xs">
         <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
-        <span>FUDMA Android Device Simulator v1.0</span>
+        <span>IKCOE Android Device Simulator v1.0</span>
       </div>
 
       {/* Main Simulated Android Phone Body Frame */}

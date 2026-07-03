@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FUDMA Lecture Reminder"
+rootProject.name = "IKCOE Lecture Reminder"
 include(":app")

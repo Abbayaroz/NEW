@@ -1,9 +1,9 @@
-package com.fudma.lecturereminder.receiver
+package com.ikcoe.lecturereminder.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.fudma.lecturereminder.data.database.AppDatabase
+import com.ikcoe.lecturereminder.data.database.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

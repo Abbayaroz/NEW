@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder
+package com.ikcoe.lecturereminder
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fudma.lecturereminder.ui.screens.*
-import com.fudma.lecturereminder.ui.theme.FUDMALectureReminderTheme
+import com.ikcoe.lecturereminder.ui.screens.*
+import com.ikcoe.lecturereminder.ui.theme.IKCOELectureReminderTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FUDMALectureReminderTheme {
+            IKCOELectureReminderTheme {
                 MainAppContainer()
             }
         }

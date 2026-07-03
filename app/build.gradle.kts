@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.fudma.lecturereminder"
+    namespace = "com.ikcoe.lecturereminder"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.fudma.lecturereminder"
+        applicationId = "com.ikcoe.lecturereminder"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

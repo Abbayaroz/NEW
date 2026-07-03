@@ -41,7 +41,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({
         </div>
         <div id="university_badge" className="flex items-center space-x-1 bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
           <Award className="w-3.5 h-3.5 text-emerald-600" />
-          <span>FUDMA Student</span>
+          <span>IKCOE Student</span>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-export const addEditLectureScreenCode = `package com.fudma.lecturereminder.ui.screens
+export const addEditLectureScreenCode = `package com.ikcoe.lecturereminder.ui.screens
 
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.fudma.lecturereminder.data.database.AppDatabase
-import com.fudma.lecturereminder.data.entity.Lecture
-import com.fudma.lecturereminder.receiver.AlarmScheduler
+import com.ikcoe.lecturereminder.data.database.AppDatabase
+import com.ikcoe.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.receiver.AlarmScheduler
 import kotlinx.coroutines.launch
 import java.util.Calendar
 

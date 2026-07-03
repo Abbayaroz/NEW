@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder.ui.screens
+package com.ikcoe.lecturereminder.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

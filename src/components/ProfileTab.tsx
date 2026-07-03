@@ -82,7 +82,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({ profile, onUpdateProfile
             <Award className="w-48 h-48" />
           </div>
 
-          {/* FUDMA Crest / Title Header */}
+          {/* IKCOE Crest / Title Header */}
           <div className="flex items-start justify-between border-b border-emerald-700/60 pb-2">
             <div>
               <h3 className="text-[9px] font-extrabold uppercase tracking-widest text-emerald-300 leading-tight">Federal University Dutsin-Ma</h3>
@@ -139,7 +139,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({ profile, onUpdateProfile
                 <span className="w-[2px] h-3.5 bg-black" />
                 <span className="w-[1px] h-3.5 bg-black" />
               </div>
-              <span className="text-[6px] text-emerald-300/80 mt-0.5 font-mono">FUDMA-{profile.matricNo.split('/').pop()}</span>
+              <span className="text-[6px] text-emerald-300/80 mt-0.5 font-mono">IKCOE-{profile.matricNo.split('/').pop()}</span>
             </div>
           </div>
 
@@ -172,7 +172,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({ profile, onUpdateProfile
               value={matricNo}
               onChange={(e) => setMatricNo(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-mono font-bold uppercase focus:ring-1 focus:ring-emerald-700 focus:outline-none"
-              placeholder="e.g. FUDMA/CSC/22/0142"
+              placeholder="e.g. IKCOE/CSC/22/0142"
             />
           </div>
 
@@ -231,7 +231,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({ profile, onUpdateProfile
       <div className="bg-gray-50 border border-gray-150 rounded-2xl p-4 space-y-2">
         <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-gray-700 flex items-center space-x-1">
           <BookOpen className="w-3.5 h-3.5 text-gray-400" />
-          <span>FUDMA Attendance Policy</span>
+          <span>IKCOE Attendance Policy</span>
         </h3>
         <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
           Federal University Dutsin-Ma requires all students to attain a minimum of <strong>75% lecture attendance</strong> to be eligible to sit for departmental and faculty final examinations. Keep your timetable updated to maintain consistency!

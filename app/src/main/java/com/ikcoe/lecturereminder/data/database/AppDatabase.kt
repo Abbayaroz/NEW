@@ -1,11 +1,11 @@
-package com.fudma.lecturereminder.data.database
+package com.ikcoe.lecturereminder.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.fudma.lecturereminder.data.dao.LectureDao
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.dao.LectureDao
+import com.ikcoe.lecturereminder.data.entity.Lecture
 
 @Database(entities = [Lecture::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -20,7 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "fudma_lecture_reminder_db"
+                    "ikcoe_lecture_reminder_db"
                 ).build()
                 INSTANCE = instance
                 instance

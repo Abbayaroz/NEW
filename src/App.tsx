@@ -4,20 +4,20 @@ import { Award, GraduationCap, Compass, BookOpen, Clock, ShieldCheck, Heart } fr
 
 export default function App() {
   return (
-    <div id="fudma_workspace_root" className="min-h-screen bg-slate-100 font-sans flex flex-col justify-between text-slate-900">
+    <div id="ikcoe_workspace_root" className="min-h-screen bg-slate-100 font-sans flex flex-col justify-between text-slate-900">
       
       {/* Top Main Application Banner Header */}
       <header id="main_header" className="h-20 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center shadow-sm select-none">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           
-          {/* FUDMA logo style header info */}
+          {/* IKCOE logo style header info */}
           <div className="flex items-center space-x-3.5">
             <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-xl shadow-sm">
               F
             </div>
             <div>
               <h1 className="text-sm md:text-base font-black text-slate-800 tracking-tight leading-none uppercase">
-                FUDMA <span className="text-emerald-600">Reminder</span>
+                IKCOE <span className="text-emerald-600">Reminder</span>
               </h1>
               <p className="text-[10px] md:text-xs text-slate-500 font-medium mt-1">
                 Official Department of Computer Science Timetable & Notification Engine
@@ -66,7 +66,7 @@ export default function App() {
           <div className="flex items-center space-x-1 justify-center">
             <span>Made with</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>for FUDMA Students</span>
+            <span>for IKCOE Students</span>
           </div>
         </div>
       </footer>

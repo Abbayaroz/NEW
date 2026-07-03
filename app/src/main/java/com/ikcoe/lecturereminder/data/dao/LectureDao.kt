@@ -1,7 +1,7 @@
-package com.fudma.lecturereminder.data.dao
+package com.ikcoe.lecturereminder.data.dao
 
 import androidx.room.*
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.entity.Lecture
 import kotlinx.coroutines.flow.Flow
 
 @Dao

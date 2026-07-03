@@ -52,7 +52,7 @@ jobs:
       - name: Upload Compiled Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: FUDMA-Lecture-Reminder-Debug-APK
+          name: IKCOE-Lecture-Reminder-Debug-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14`
@@ -68,11 +68,11 @@ jobs:
 }
 
 android {
-    namespace = "com.fudma.lecturereminder"
+    namespace = "com.ikcoe.lecturereminder"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.fudma.lecturereminder"
+        applicationId = "com.ikcoe.lecturereminder"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -152,7 +152,7 @@ dependencies {
     code: `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.fudma.lecturereminder">
+    package="com.ikcoe.lecturereminder">
 
     <!-- Permissions required for Alarms and Reboot support -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -166,17 +166,17 @@ dependencies {
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="FUDMA Lecture Reminder"
+        android:label="IKCOE Lecture Reminder"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FUDMALectureReminder"
+        android:theme="@style/Theme.IKCOELectureReminder"
         tools:targetApi="31">
         
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="FUDMA Lecture Reminder"
-            android:theme="@style/Theme.FUDMALectureReminder">
+            android:label="IKCOE Lecture Reminder"
+            android:theme="@style/Theme.IKCOELectureReminder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -207,8 +207,8 @@ dependencies {
   {
     category: 'Database & Models',
     name: 'Lecture.kt (Entity)',
-    path: 'app/src/main/java/com/fudma/lecturereminder/data/entity/Lecture.kt',
-    code: `package com.fudma.lecturereminder.data.entity
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/data/entity/Lecture.kt',
+    code: `package com.ikcoe.lecturereminder.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -229,11 +229,11 @@ data class Lecture(
   {
     category: 'Database & Models',
     name: 'LectureDao.kt (DAO)',
-    path: 'app/src/main/java/com/fudma/lecturereminder/data/dao/LectureDao.kt',
-    code: `package com.fudma.lecturereminder.data.dao
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/data/dao/LectureDao.kt',
+    code: `package com.ikcoe.lecturereminder.data.dao
 
 import androidx.room.*
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.entity.Lecture
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -263,15 +263,15 @@ interface LectureDao {
   {
     category: 'Database & Models',
     name: 'AppDatabase.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/data/database/AppDatabase.kt',
-    code: `package com.fudma.lecturereminder.data.database
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/data/database/AppDatabase.kt',
+    code: `package com.ikcoe.lecturereminder.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.fudma.lecturereminder.data.dao.LectureDao
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.dao.LectureDao
+import com.ikcoe.lecturereminder.data.entity.Lecture
 
 @Database(entities = [Lecture::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -286,7 +286,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "fudma_lecture_reminder_db"
+                    "ikcoe_lecture_reminder_db"
                 ).build()
                 INSTANCE = instance
                 instance
@@ -298,8 +298,8 @@ abstract class AppDatabase : RoomDatabase() {
   {
     category: 'Background Scheduling',
     name: 'AlarmScheduler.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/receiver/AlarmScheduler.kt',
-    code: `package com.fudma.lecturereminder.receiver
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/receiver/AlarmScheduler.kt',
+    code: `package com.ikcoe.lecturereminder.receiver
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -307,7 +307,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.entity.Lecture
 import java.util.*
 
 class AlarmScheduler(private val context: Context) {
@@ -401,8 +401,8 @@ class AlarmScheduler(private val context: Context) {
   {
     category: 'Background Scheduling',
     name: 'AlarmReceiver.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/receiver/AlarmReceiver.kt',
-    code: `package com.fudma.lecturereminder.receiver
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/receiver/AlarmReceiver.kt',
+    code: `package com.ikcoe.lecturereminder.receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -415,8 +415,8 @@ import android.os.Build
 import android.os.Vibrator
 import android.os.VibrationEffect
 import androidx.core.app.NotificationCompat
-import com.fudma.lecturereminder.MainActivity
-import com.fudma.lecturereminder.R
+import com.ikcoe.lecturereminder.MainActivity
+import com.ikcoe.lecturereminder.R
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -434,7 +434,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val vibeEnabled = prefs.getBoolean("vibrate_enabled", true)
         val soundEnabled = prefs.getBoolean("sound_enabled", true)
 
-        val channelId = "fudma_lecture_reminders"
+        val channelId = "ikcoe_lecture_reminders"
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -494,13 +494,13 @@ class AlarmReceiver : BroadcastReceiver() {
   {
     category: 'Background Scheduling',
     name: 'BootReceiver.kt (Phone Restart)',
-    path: 'app/src/main/java/com/fudma/lecturereminder/receiver/BootReceiver.kt',
-    code: `package com.fudma.lecturereminder.receiver
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/receiver/BootReceiver.kt',
+    code: `package com.ikcoe.lecturereminder.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.fudma.lecturereminder.data.database.AppDatabase
+import com.ikcoe.lecturereminder.data.database.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -526,26 +526,26 @@ class BootReceiver : BroadcastReceiver() {
   {
     category: 'Theme & Presentation',
     name: 'Color.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/theme/Color.kt',
-    code: `package com.fudma.lecturereminder.ui.theme
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/theme/Color.kt',
+    code: `package com.ikcoe.lecturereminder.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
 // University Style Palette: Greens, Whites, Charcoal
-val FudmaGreenPrimary = Color(0xFF1E5631) // Deep Forest Green
-val FudmaGreenSecondary = Color(0xFF4C9A2A) // Emerald Green Accent
-val FudmaGreenLight = Color(0xFFD0F0C0) // Soft mint green background
-val FudmaCharcoal = Color(0xFF1F2937) // Deep Dark Gray
-val FudmaLightBg = Color(0xFFF9FAFB) // Warm white background
-val FudmaWhite = Color(0xFFFFFFFF)
-val FudmaGray = Color(0xFFE5E7EB)
-val FudmaSubtext = Color(0xFF6B7280)`
+val IkcoeGreenPrimary = Color(0xFF1E5631) // Deep Forest Green
+val IkcoeGreenSecondary = Color(0xFF4C9A2A) // Emerald Green Accent
+val IkcoeGreenLight = Color(0xFFD0F0C0) // Soft mint green background
+val IkcoeCharcoal = Color(0xFF1F2937) // Deep Dark Gray
+val IkcoeLightBg = Color(0xFFF9FAFB) // Warm white background
+val IkcoeWhite = Color(0xFFFFFFFF)
+val IkcoeGray = Color(0xFFE5E7EB)
+val IkcoeSubtext = Color(0xFF6B7280)`
   },
   {
     category: 'Theme & Presentation',
     name: 'Theme.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/theme/Theme.kt',
-    code: `package com.fudma.lecturereminder.ui.theme
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/theme/Theme.kt',
+    code: `package com.ikcoe.lecturereminder.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -554,27 +554,27 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val DarkColorScheme = darkColorScheme(
-    primary = FudmaGreenSecondary,
-    secondary = FudmaGreenLight,
-    background = FudmaCharcoal,
+    primary = IkcoeGreenSecondary,
+    secondary = IkcoeGreenLight,
+    background = IkcoeCharcoal,
     surface = Color(0xFF111827),
-    onPrimary = FudmaWhite,
-    onBackground = FudmaWhite,
-    onSurface = FudmaWhite
+    onPrimary = IkcoeWhite,
+    onBackground = IkcoeWhite,
+    onSurface = IkcoeWhite
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = FudmaGreenPrimary,
-    secondary = FudmaGreenSecondary,
-    background = FudmaLightBg,
-    surface = FudmaWhite,
-    onPrimary = FudmaWhite,
-    onBackground = FudmaCharcoal,
-    onSurface = FudmaCharcoal
+    primary = IkcoeGreenPrimary,
+    secondary = IkcoeGreenSecondary,
+    background = IkcoeLightBg,
+    surface = IkcoeWhite,
+    onPrimary = IkcoeWhite,
+    onBackground = IkcoeCharcoal,
+    onSurface = IkcoeCharcoal
 )
 
 @Composable
-fun FUDMALectureReminderTheme(
+fun IKCOELectureReminderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -590,8 +590,8 @@ fun FUDMALectureReminderTheme(
   {
     category: 'Screens & UI',
     name: 'MainActivity.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/MainActivity.kt',
-    code: `package com.fudma.lecturereminder
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/MainActivity.kt',
+    code: `package com.ikcoe.lecturereminder
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -606,14 +606,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fudma.lecturereminder.ui.screens.*
-import com.fudma.lecturereminder.ui.theme.FUDMALectureReminderTheme
+import com.ikcoe.lecturereminder.ui.screens.*
+import com.ikcoe.lecturereminder.ui.theme.IKCOELectureReminderTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FUDMALectureReminderTheme {
+            IKCOELectureReminderTheme {
                 MainAppContainer()
             }
         }
@@ -693,8 +693,8 @@ fun MainAppContainer() {
   {
     category: 'Screens & UI',
     name: 'DashboardScreen.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/DashboardScreen.kt',
-    code: `package com.fudma.lecturereminder.ui.screens
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/screens/DashboardScreen.kt',
+    code: `package com.ikcoe.lecturereminder.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -824,31 +824,31 @@ fun DashboardScreen(navController: NavController) {
   {
     category: 'Theme & Presentation',
     name: 'Type.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/theme/Type.kt',
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/theme/Type.kt',
     code: typeCode
   },
   {
     category: 'Screens & UI',
     name: 'TimetableScreen.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/TimetableScreen.kt',
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/screens/TimetableScreen.kt',
     code: timetableScreenCode
   },
   {
     category: 'Screens & UI',
     name: 'AddEditLectureScreen.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/AddEditLectureScreen.kt',
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/screens/AddEditLectureScreen.kt',
     code: addEditLectureScreenCode
   },
   {
     category: 'Screens & UI',
     name: 'SettingsScreen.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/SettingsScreen.kt',
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/screens/SettingsScreen.kt',
     code: settingsScreenCode
   },
   {
     category: 'Screens & UI',
     name: 'ProfileScreen.kt',
-    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/ProfileScreen.kt',
+    path: 'app/src/main/java/com/ikcoe/lecturereminder/ui/screens/ProfileScreen.kt',
     code: profileScreenCode
   },
   {
@@ -883,7 +883,7 @@ fun DashboardScreen(navController: NavController) {
     path: 'app/src/main/res/values/themes.xml',
     code: `<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.FUDMALectureReminder" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.IKCOELectureReminder" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>`
   },
   {

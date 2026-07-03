@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder.receiver
+package com.ikcoe.lecturereminder.receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,8 +11,8 @@ import android.os.Build
 import android.os.Vibrator
 import android.os.VibrationEffect
 import androidx.core.app.NotificationCompat
-import com.fudma.lecturereminder.MainActivity
-import com.fudma.lecturereminder.R
+import com.ikcoe.lecturereminder.MainActivity
+import com.ikcoe.lecturereminder.R
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -30,7 +30,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val vibeEnabled = prefs.getBoolean("vibrate_enabled", true)
         val soundEnabled = prefs.getBoolean("sound_enabled", true)
 
-        val channelId = "fudma_lecture_reminders"
+        val channelId = "ikcoe_lecture_reminders"
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

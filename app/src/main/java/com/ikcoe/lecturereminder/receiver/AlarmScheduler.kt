@@ -1,4 +1,4 @@
-package com.fudma.lecturereminder.receiver
+package com.ikcoe.lecturereminder.receiver
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.fudma.lecturereminder.data.entity.Lecture
+import com.ikcoe.lecturereminder.data.entity.Lecture
 import java.util.*
 
 class AlarmScheduler(private val context: Context) {
