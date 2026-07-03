@@ -1,3 +1,9 @@
+import { typeCode } from './code_strings/typeCode';
+import { timetableScreenCode } from './code_strings/timetableScreenCode';
+import { addEditLectureScreenCode } from './code_strings/addEditLectureScreenCode';
+import { settingsScreenCode } from './code_strings/settingsScreenCode';
+import { profileScreenCode } from './code_strings/profileScreenCode';
+
 export interface AndroidFile {
   path: string;
   name: string;
@@ -814,6 +820,36 @@ fun DashboardScreen(navController: NavController) {
         }
     }
 }`
+  },
+  {
+    category: 'Theme & Presentation',
+    name: 'Type.kt',
+    path: 'app/src/main/java/com/fudma/lecturereminder/ui/theme/Type.kt',
+    code: typeCode
+  },
+  {
+    category: 'Screens & UI',
+    name: 'TimetableScreen.kt',
+    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/TimetableScreen.kt',
+    code: timetableScreenCode
+  },
+  {
+    category: 'Screens & UI',
+    name: 'AddEditLectureScreen.kt',
+    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/AddEditLectureScreen.kt',
+    code: addEditLectureScreenCode
+  },
+  {
+    category: 'Screens & UI',
+    name: 'SettingsScreen.kt',
+    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/SettingsScreen.kt',
+    code: settingsScreenCode
+  },
+  {
+    category: 'Screens & UI',
+    name: 'ProfileScreen.kt',
+    path: 'app/src/main/java/com/fudma/lecturereminder/ui/screens/ProfileScreen.kt',
+    code: profileScreenCode
   },
   {
     category: 'Resources',
