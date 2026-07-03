@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +50,7 @@ fun SettingsScreen(navController: NavController) {
     
     var priorityDropdownExpanded by remember { mutableStateOf(false) }
     var rebooting by remember { mutableStateOf(false) }
-    var rebootLogs by remember { mutableStateListOf<String>() }
+    val rebootLogs = remember { mutableStateListOf<String>() }
     
     // Simulated alarm history logs inside the app session
     val alarmHistory = remember { mutableStateListOf<Pair<String, String>>() }
