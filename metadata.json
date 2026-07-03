@@ -1,6 +1,6 @@
 {
-  "name": "IKCOE Lecture Reminder",
-  "description": "Never miss a class again. Organise your university lecture timetable, receive automatic offline notifications, and manage your profile.",
+  "name": "IKCOE Lecture Timetable Reminder System",
+  "description": "Enterprise multi-role system featuring administration dashboards, visual timetables, clash-detecting conflict solvers, custom QR attendance scanners, and complete API blueprints.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
