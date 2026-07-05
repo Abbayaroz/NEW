@@ -17,7 +17,7 @@ const DB = {
     { id: "usr-admin", email: "admin@ikcoe.edu.ng", passwordHash: "$2b$10$xyz", role: "Administrator", name: "Dr. Tarila Kingsley" },
     { id: "usr-lecturer1", email: "sulaiman@ikcoe.edu.ng", passwordHash: "$2b$10$xyz", role: "Lecturer", name: "Mr. Sulaiman M. Garba", isApproved: true },
     { id: "usr-lecturer2", email: "florence@ikcoe.edu.ng", passwordHash: "$2b$10$xyz", role: "Lecturer", name: "Mrs. Florence Boro", isApproved: true },
-    { id: "usr-student1", email: "bashir@ikcoe.edu.ng", passwordHash: "$2b$10$xyz", role: "Student", name: "Bashir Abba Yaroz", matricNo: "IKCOE/CSC/22/0142" },
+    { id: "usr-student1", email: "bashirabbayaroz@gmail.com", passwordHash: "$2b$10$xyz", role: "Student", name: "Bashir Abba Yaroz", matricNo: "IKCOE/CSC/22/0142" },
     { id: "usr-officer1", email: "timetable@ikcoe.edu.ng", passwordHash: "$2b$10$xyz", role: "Timetable Officer", name: "Engr. Pere Joseph", isApproved: true }
   ],
   faculties: [
@@ -248,7 +248,7 @@ app.get("/api/admin/users", requireAuth, requireRole(["Administrator"]), (req, r
   res.json(DB.users);
 });
 
-app.put("/api/admin/users/:id/approve", requireAuth, requireRole(["Administrator"]), (req, res) => {
+app.put("/api/admin/users/:id/approve", requireAuth, requireRole(["Administrator"]), (req: any, res: any) => {
   const { id } = req.params;
   const user = DB.users.find(u => u.id === id);
   if (!user) return res.status(404).json({ error: "User not found." });
@@ -325,7 +325,7 @@ function checkTimetableConflicts(id: string | null, day: string, startTime: stri
   return conflicts;
 }
 
-app.post("/api/timetable", requireAuth, requireRole(["Administrator", "Timetable Officer"]), (req, res) => {
+app.post("/api/timetable", requireAuth, requireRole(["Administrator", "Timetable Officer"]), (req: any, res: any) => {
   const { courseId, lecturerId, venueId, day, startTime, endTime, level } = req.body;
   if (!courseId || !lecturerId || !venueId || !day || !startTime || !endTime || !level) {
     return res.status(400).json({ error: "Missing required timetable fields." });
@@ -406,7 +406,7 @@ app.get("/api/attendance", requireAuth, (req, res) => {
   res.json(logs);
 });
 
-app.post("/api/attendance/checkin", requireAuth, requireRole(["Student"]), (req, res) => {
+app.post("/api/attendance/checkin", requireAuth, requireRole(["Student"]), (req: any, res: any) => {
   const { code } = req.body; // e.g. "qr-tt-1"
   if (!code || !code.startsWith("qr-")) {
     return res.status(400).json({ error: "Invalid attendance QR Code structure." });
@@ -452,7 +452,7 @@ app.get("/api/announcements", requireAuth, (req, res) => {
   res.json(DB.announcements);
 });
 
-app.post("/api/announcements", requireAuth, requireRole(["Lecturer", "Administrator"]), (req, res) => {
+app.post("/api/announcements", requireAuth, requireRole(["Lecturer", "Administrator"]), (req: any, res: any) => {
   const { title, content } = req.body;
   const newAnn = {
     id: `ann-${Date.now()}`,
@@ -470,7 +470,7 @@ app.get("/api/assignments", requireAuth, (req, res) => {
   res.json(DB.assignments);
 });
 
-app.post("/api/assignments", requireAuth, requireRole(["Lecturer", "Administrator"]), (req, res) => {
+app.post("/api/assignments", requireAuth, requireRole(["Lecturer", "Administrator"]), (req: any, res: any) => {
   const { courseId, title, dueDate, description } = req.body;
   const newAsg = {
     id: `asg-${Date.now()}`,
@@ -490,12 +490,12 @@ app.get("/api/audit-logs", requireAuth, requireRole(["Administrator"]), (req, re
 });
 
 // --- NOTIFICATION MANAGEMENT ---
-app.get("/api/notifications", requireAuth, (req, res) => {
+app.get("/api/notifications", requireAuth, (req: any, res: any) => {
   const userNotifs = DB.notifications.filter(n => n.recipientId === req.user.id);
   res.json(userNotifs);
 });
 
-app.post("/api/notifications/mark-read", requireAuth, (req, res) => {
+app.post("/api/notifications/mark-read", requireAuth, (req: any, res: any) => {
   DB.notifications
     .filter(n => n.recipientId === req.user.id)
     .forEach(n => n.isRead = true);

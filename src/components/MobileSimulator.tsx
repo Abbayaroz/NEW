@@ -3,7 +3,7 @@ import {
   Wifi, Battery, Bell, Calendar, User, ChevronLeft, Square, Home, BookOpen, 
   MapPin, Clock, CheckSquare, RefreshCw, AlertTriangle, Play, Volume2, 
   PlusCircle, Sparkles, LogIn, UserCheck, QrCode, FileText, Camera, ShieldCheck, 
-  Compass, Barcode
+  Compass, Barcode, X
 } from 'lucide-react';
 import { 
   User as UserType, TimetableSlot, AttendanceLog, Announcement, LectureNote, 

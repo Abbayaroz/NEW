@@ -20,7 +20,7 @@ const DEFAULT_USERS: User[] = [
   { id: "usr-admin", email: "admin@ikcoe.edu.ng", role: "Administrator", name: "Dr. Tarila Kingsley" },
   { id: "usr-lecturer1", email: "sulaiman@ikcoe.edu.ng", role: "Lecturer", name: "Mr. Sulaiman M. Garba", isApproved: true },
   { id: "usr-lecturer2", email: "florence@ikcoe.edu.ng", role: "Lecturer", name: "Mrs. Florence Boro", isApproved: true },
-  { id: "usr-student1", email: "bashir@ikcoe.edu.ng", role: "Student", name: "Bashir Abba Yaroz", matricNo: "IKCOE/CSC/22/0142" },
+  { id: "usr-student1", email: "bashirabbayaroz@gmail.com", role: "Student", name: "Bashir Abba Yaroz", matricNo: "IKCOE/CSC/22/0142" },
   { id: "usr-officer1", email: "timetable@ikcoe.edu.ng", role: "Timetable Officer", name: "Engr. Pere Joseph", isApproved: true }
 ];
 
@@ -146,17 +146,101 @@ export default function App() {
     try {
       const res = await fetch('/api/health');
       if (res.ok) {
-        // Fetch users
-        const uRes = await fetch('/api/admin/users', { headers: { 'Authorization': `Bearer ${activeUser?.id || 'usr-admin'}` } });
-        if (uRes.ok) {
-          const uData = await uRes.json();
-          setUsers(uData);
+        const authHeader = { 'Authorization': `Bearer ${activeUser?.id || 'usr-admin'}` };
+
+        // Fetch users (Admin only)
+        if (activeUser?.role === 'Administrator') {
+          const uRes = await fetch('/api/admin/users', { headers: authHeader });
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            setUsers(uData);
+          }
+        } else {
+          // If not Admin, we can still fetch standard user profiles or fallback
+          const uRes = await fetch('/api/admin/users', { headers: authHeader });
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            setUsers(uData);
+          }
         }
+
         // Fetch timetable slots
-        const tRes = await fetch('/api/timetable', { headers: { 'Authorization': `Bearer ${activeUser?.id || 'usr-admin'}` } });
+        const tRes = await fetch('/api/timetable', { headers: authHeader });
         if (tRes.ok) {
           const tData = await tRes.json();
           setTimetable(tData);
+        }
+
+        // Fetch faculties
+        const fRes = await fetch('/api/admin/faculties', { headers: authHeader });
+        if (fRes.ok) {
+          const fData = await fRes.json();
+          setFaculties(fData);
+        }
+
+        // Fetch departments
+        const dRes = await fetch('/api/admin/departments', { headers: authHeader });
+        if (dRes.ok) {
+          const dData = await dRes.json();
+          setDepartments(dData);
+        }
+
+        // Fetch programmes
+        const pRes = await fetch('/api/admin/programmes', { headers: authHeader });
+        if (pRes.ok) {
+          const pData = await pRes.json();
+          setProgrammes(pData);
+        }
+
+        // Fetch courses
+        const cRes = await fetch('/api/admin/courses', { headers: authHeader });
+        if (cRes.ok) {
+          const cData = await cRes.json();
+          setCourses(cData);
+        }
+
+        // Fetch venues
+        const vRes = await fetch('/api/admin/venues', { headers: authHeader });
+        if (vRes.ok) {
+          const vData = await vRes.json();
+          setVenues(vData);
+        }
+
+        // Fetch attendance logs
+        const attRes = await fetch('/api/attendance', { headers: authHeader });
+        if (attRes.ok) {
+          const attData = await attRes.json();
+          setAttendance(attData);
+        }
+
+        // Fetch announcements
+        const annRes = await fetch('/api/announcements', { headers: authHeader });
+        if (annRes.ok) {
+          const annData = await annRes.json();
+          setAnnouncements(annData);
+        }
+
+        // Fetch assignments
+        const asgRes = await fetch('/api/assignments', { headers: authHeader });
+        if (asgRes.ok) {
+          const asgData = await asgRes.json();
+          setAssignments(asgData);
+        }
+
+        // Fetch lecture notes
+        const nRes = await fetch('/api/notes', { headers: authHeader });
+        if (nRes.ok) {
+          const nData = await nRes.json();
+          setNotes(nData);
+        }
+
+        // Fetch audit logs (Admin only)
+        if (activeUser?.role === 'Administrator') {
+          const audRes = await fetch('/api/audit-logs', { headers: authHeader });
+          if (audRes.ok) {
+            const audData = await audRes.json();
+            setAuditLogs(audData);
+          }
         }
       }
     } catch (e) {
