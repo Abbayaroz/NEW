@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Building2, BookOpen, Users, Calendar, AlertTriangle, Download, 
   Plus, Check, X, ShieldAlert, Sparkles, RefreshCw, BarChart3, Clock, 
-  MapPin, Send, Trash2, Key, CheckSquare, Search, Filter, HelpCircle
+  MapPin, Send, Trash2, Key, CheckSquare, Search, Filter, HelpCircle, LogOut
 } from 'lucide-react';
 import { 
   User, Faculty, Department, Programme, Course, Venue, 
@@ -36,6 +36,7 @@ interface WebPortalProps {
   onRestoreDb: () => void;
   onResetUserPassword: (id: string) => void;
   activeUser: User | null;
+  onLogout?: () => void;
 }
 
 export const WebPortal: React.FC<WebPortalProps> = ({
@@ -43,7 +44,7 @@ export const WebPortal: React.FC<WebPortalProps> = ({
   announcements, assignments, notes, auditLogs,
   onAddFaculty, onAddDepartment, onAddCourse, onAddVenue, onAddTimetable, onDeleteTimetable,
   onApproveUser, onDeleteUser, onAddAnnouncement, onAddAssignment, onAddNote,
-  onBackupDb, onRestoreDb, onResetUserPassword, activeUser
+  onBackupDb, onRestoreDb, onResetUserPassword, activeUser, onLogout
 }) => {
   const [activeMenu, setActiveMenu] = useState<'dashboard' | 'academic' | 'resources' | 'users' | 'timetable' | 'lecturer' | 'reports'>('dashboard');
 
@@ -326,6 +327,19 @@ export const WebPortal: React.FC<WebPortalProps> = ({
                 <span>Restore</span>
               </button>
             </div>
+          </div>
+        )}
+        
+        {/* Logout Button */}
+        {onLogout && (
+          <div className="pt-4 border-t border-slate-800">
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl text-xs font-bold bg-rose-950/45 hover:bg-rose-900/60 text-rose-200 hover:text-white border border-rose-900/40 transition-all cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Log Out of Portal</span>
+            </button>
           </div>
         )}
       </nav>

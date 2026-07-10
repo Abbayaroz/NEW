@@ -3,6 +3,7 @@ import { WebPortal } from './components/WebPortal';
 import { MobileSimulator } from './components/MobileSimulator';
 import { BlueprintExplorer } from './components/BlueprintExplorer';
 import { ApiTerminal } from './components/ApiTerminal';
+import { WebAuthPortal } from './components/WebAuthPortal';
 import { 
   User, Faculty, Department, Programme, Course, Venue, 
   TimetableSlot, AttendanceLog, Announcement, Assignment, 
@@ -114,7 +115,18 @@ export default function App() {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(DEFAULT_AUDITS);
 
   // Authenticated State & Profile
-  const [activeUser, setActiveUser] = useState<User | null>(DEFAULT_USERS[0]); // Starts with admin signed in for seamless exploration
+  const [activeUser, setActiveUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('ikcoe_active_user');
+    return saved ? JSON.parse(saved) : DEFAULT_USERS[0];
+  });
+
+  useEffect(() => {
+    if (activeUser) {
+      localStorage.setItem('ikcoe_active_user', JSON.stringify(activeUser));
+    } else {
+      localStorage.removeItem('ikcoe_active_user');
+    }
+  }, [activeUser]);
 
   // REST API Stream Logging Terminal
   const [apiLogs, setApiLogs] = useState<any[]>([]);
@@ -389,25 +401,87 @@ export default function App() {
     logApiRequest('POST', `/api/auth/reset-password`, 200, { userId: id }, { message: `Secure SHA256 hashed temporary key generated for ${u?.email}` }, Date.now() - start);
   };
 
-  const handleRegisterUser = (name: string, email: string, role: 'Student' | 'Lecturer', matricNo?: string) => {
+  const handleRegisterUser = async (name: string, email: string, role: 'Student' | 'Lecturer', matricNo?: string, password = 'password123') => {
     const start = Date.now();
-    if (users.some(u => u.email === email)) {
-      logApiRequest('POST', '/api/auth/register', 400, { name, email, role }, { error: "Email already exists" }, Date.now() - start);
-      return { success: false, error: "This email address is already in use." };
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, password, role, matricNo })
+      });
+      const data = await response.json();
+      logApiRequest('POST', '/api/auth/register', response.status, { name, email, role, matricNo }, data, Date.now() - start);
+      if (response.ok) {
+        const newUser: User = data.user || {
+          id: data.user?.id || `usr-${Date.now()}`,
+          name,
+          email,
+          role,
+          matricNo,
+          isApproved: role === 'Student'
+        };
+        setUsers(prev => [...prev, newUser]);
+        syncStateWithServer();
+        return { success: true };
+      } else {
+        return { success: false, error: data.error || 'Registration failed.' };
+      }
+    } catch (err: any) {
+      console.warn("Backend offline, falling back to local simulation for registration.");
+      if (users.some(u => u.email === email)) {
+        logApiRequest('POST', '/api/auth/register', 400, { name, email, role }, { error: "Email already exists" }, Date.now() - start);
+        return { success: false, error: "This email address is already in use." };
+      }
+      const newUser: User = {
+        id: `usr-${Date.now()}`,
+        name,
+        email,
+        role,
+        matricNo,
+        isApproved: role === 'Student'
+      };
+      setUsers(prev => [...prev, newUser]);
+      logApiRequest('POST', '/api/auth/register', 201, { name, email, role, matricNo }, { message: "Account created (Simulated Local Mode)", user: newUser }, Date.now() - start);
+      return { success: true };
     }
+  };
 
-    const newUser: User = {
-      id: `usr-${Date.now()}`,
-      name,
-      email,
-      role,
-      matricNo,
-      isApproved: role === 'Student' // Students auto-approved, lecturers need admin approval
-    };
-
-    setUsers(prev => [...prev, newUser]);
-    logApiRequest('POST', '/api/auth/register', 201, { name, email, role, matricNo }, { message: "Account created", user: newUser }, Date.now() - start);
-    return { success: true };
+  const handleLoginUser = async (email: string, password = 'password123') => {
+    const start = Date.now();
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
+      logApiRequest('POST', '/api/auth/login', response.status, { email }, data, Date.now() - start);
+      if (response.ok) {
+        setActiveUser(data.user);
+        syncStateWithServer();
+        return { success: true, user: data.user };
+      } else {
+        return { success: false, error: data.error || 'Login failed.' };
+      }
+    } catch (err: any) {
+      console.warn("Backend offline, falling back to local simulation for login.");
+      const matched = users.find(u => u.email === email);
+      if (!matched) {
+        logApiRequest('POST', '/api/auth/login', 401, { email }, { error: "Invalid credentials" }, Date.now() - start);
+        return { success: false, error: 'No user account matches this email.' };
+      }
+      if (matched.role !== 'Student' && matched.role !== 'Administrator' && !matched.isApproved) {
+        logApiRequest('POST', '/api/auth/login', 403, { email }, { error: "Pending approval" }, Date.now() - start);
+        return { success: false, error: 'Your staff account is pending administrator verification.' };
+      }
+      setActiveUser(matched);
+      logApiRequest('POST', '/api/auth/login', 200, { email }, { message: "Login successful (Simulated Local Mode)", user: matched }, Date.now() - start);
+      return { success: true, user: matched };
+    }
   };
 
   const handleAddAnnouncement = (title: string, content: string) => {
@@ -665,34 +739,42 @@ export default function App() {
           
           {/* Active View Display */}
           {activeWorkspaceTab === 'portal' && (
-            <WebPortal
-              users={users}
-              faculties={faculties}
-              departments={departments}
-              programmes={programmes}
-              courses={courses}
-              venues={venues}
-              timetable={timetable}
-              announcements={announcements}
-              assignments={assignments}
-              notes={notes}
-              auditLogs={auditLogs}
-              onAddFaculty={handleAddFaculty}
-              onAddDepartment={handleAddDepartment}
-              onAddCourse={handleAddCourse}
-              onAddVenue={handleAddVenue}
-              onAddTimetable={handleAddTimetableSlot}
-              onDeleteTimetable={handleDeleteTimetableSlot}
-              onApproveUser={handleApproveUser}
-              onDeleteUser={handleDeleteUser}
-              onAddAnnouncement={handleAddAnnouncement}
-              onAddAssignment={handleAddAssignment}
-              onAddNote={handleAddNote}
-              onBackupDb={handleBackupDb}
-              onRestoreDb={handleRestoreDb}
-              onResetUserPassword={handleResetUserPassword}
-              activeUser={activeUser}
-            />
+            activeUser ? (
+              <WebPortal
+                users={users}
+                faculties={faculties}
+                departments={departments}
+                programmes={programmes}
+                courses={courses}
+                venues={venues}
+                timetable={timetable}
+                announcements={announcements}
+                assignments={assignments}
+                notes={notes}
+                auditLogs={auditLogs}
+                onAddFaculty={handleAddFaculty}
+                onAddDepartment={handleAddDepartment}
+                onAddCourse={handleAddCourse}
+                onAddVenue={handleAddVenue}
+                onAddTimetable={handleAddTimetableSlot}
+                onDeleteTimetable={handleDeleteTimetableSlot}
+                onApproveUser={handleApproveUser}
+                onDeleteUser={handleDeleteUser}
+                onAddAnnouncement={handleAddAnnouncement}
+                onAddAssignment={handleAddAssignment}
+                onAddNote={handleAddNote}
+                onBackupDb={handleBackupDb}
+                onRestoreDb={handleRestoreDb}
+                onResetUserPassword={handleResetUserPassword}
+                activeUser={activeUser}
+                onLogout={() => setActiveUser(null)}
+              />
+            ) : (
+              <WebAuthPortal
+                onLogin={handleLoginUser}
+                onRegister={handleRegisterUser}
+              />
+            )
           )}
 
           {activeWorkspaceTab === 'simulator' && (
@@ -710,6 +792,7 @@ export default function App() {
                   onLogin={setActiveUser}
                   onLogout={() => setActiveUser(null)}
                   onRegister={handleRegisterUser}
+                  onLoginWithCredentials={handleLoginUser}
                   onUpdateSettings={setSettings}
                   onCheckinAttendance={handleCheckinAttendance}
                   onAddAttendance={(log) => setAttendance(prev => [{ id: `att-${Date.now()}`, ...log }, ...prev])}

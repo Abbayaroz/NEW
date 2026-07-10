@@ -21,7 +21,8 @@ interface MobileSimulatorProps {
   activeUser: UserType | null;
   onLogin: (user: UserType) => void;
   onLogout: () => void;
-  onRegister: (name: string, email: string, role: 'Student' | 'Lecturer', matricNo?: string) => { success: boolean; error?: string };
+  onRegister: (name: string, email: string, role: 'Student' | 'Lecturer', matricNo?: string, password?: string) => Promise<{ success: boolean; error?: string }> | { success: boolean; error?: string };
+  onLoginWithCredentials?: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
   onUpdateSettings: (settings: NotificationSettings) => void;
   onCheckinAttendance: (qrCode: string) => { success: boolean; message: string };
   onAddAttendance: (log: Omit<AttendanceLog, 'id'>) => void;
@@ -31,7 +32,7 @@ interface MobileSimulatorProps {
 
 export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
   users, timetable, attendanceLogs, announcements, notes, notifications, settings,
-  activeUser, onLogin, onLogout, onRegister, onUpdateSettings,
+  activeUser, onLogin, onLogout, onRegister, onLoginWithCredentials, onUpdateSettings,
   onCheckinAttendance, onAddAttendance, onAddNotification, onCancelLecture
 }) => {
   
@@ -49,7 +50,10 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
   const [regEmail, setRegEmail] = useState('');
   const [regRole, setRegRole] = useState<'Student' | 'Lecturer'>('Student');
   const [regMatric, setRegMatric] = useState('');
+  const [regPassword, setRegPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegisteringUser, setIsRegisteringUser] = useState(false);
 
   // Scanning simulation
   const [isScanning, setIsScanning] = useState(false);
@@ -149,38 +153,64 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
   };
 
   // Handle Login Inside Mobile Frame
-  const handleMobileLogin = (e: React.FormEvent) => {
+  const handleMobileLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
-    const matched = users.find(u => u.email === authEmail.trim());
-    if (!matched) {
-      setAuthError('No user account matches this email.');
-      return;
+    setIsLoggingIn(true);
+    try {
+      if (onLoginWithCredentials) {
+        const res = await onLoginWithCredentials(authEmail.trim(), authPassword);
+        if (res.success) {
+          setAuthEmail(''); setAuthPassword('');
+        } else {
+          setAuthError(res.error || 'Authentication failed.');
+        }
+      } else {
+        const matched = users.find(u => u.email === authEmail.trim());
+        if (!matched) {
+          setAuthError('No user account matches this email.');
+          setIsLoggingIn(false);
+          return;
+        }
+        if (matched.role === 'Lecturer' && !matched.isApproved) {
+          setAuthError('Your staff account is pending administrator verification.');
+          setIsLoggingIn(false);
+          return;
+        }
+        onLogin(matched);
+        setAuthEmail(''); setAuthPassword('');
+      }
+    } catch (err) {
+      setAuthError('An unexpected error occurred during login.');
+    } finally {
+      setIsLoggingIn(false);
     }
-    if (matched.role === 'Lecturer' && !matched.isApproved) {
-      setAuthError('Your staff account is pending administrator verification.');
-      return;
-    }
-    onLogin(matched);
-    setAuthEmail(''); setAuthPassword('');
   };
 
   // Handle Registration Inside Mobile Frame
-  const handleMobileRegister = (e: React.FormEvent) => {
+  const handleMobileRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
-    if (!regName || !regEmail) {
+    if (!regName || !regEmail || !regPassword) {
       setAuthError('All fields are required.');
       return;
     }
-    const res = onRegister(regName, regEmail, regRole, regRole === 'Student' ? regMatric : undefined);
-    if (res.success) {
-      setIsRegistering(false);
-      setAuthEmail(regEmail);
-      setAuthError('Account registered! Staff pending approval. Students can login immediately.');
-      setRegName(''); setRegEmail(''); setRegMatric('');
-    } else {
-      setAuthError(res.error || 'Registration failed.');
+    setIsRegisteringUser(true);
+    try {
+      const res = await onRegister(regName, regEmail, regRole, regRole === 'Student' ? regMatric : undefined, regPassword);
+      if (res.success) {
+        setIsRegistering(false);
+        setAuthEmail(regEmail);
+        setAuthPassword(regPassword);
+        setAuthError('Account registered! Staff accounts require admin approval. Students can login immediately.');
+        setRegName(''); setRegEmail(''); setRegMatric(''); setRegPassword('');
+      } else {
+        setAuthError(res.error || 'Registration failed.');
+      }
+    } catch (err) {
+      setAuthError('An unexpected error occurred during registration.');
+    } finally {
+      setIsRegisteringUser(false);
     }
   };
 
@@ -368,6 +398,12 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
                       className="w-full bg-white/10 border border-white/20 text-xs font-bold px-3 py-2 rounded-xl text-white placeholder-emerald-300 focus:outline-none"
                     />
 
+                    <input 
+                      type="password" value={regPassword} onChange={e => setRegPassword(e.target.value)}
+                      placeholder="Choose Password" required
+                      className="w-full bg-white/10 border border-white/20 text-xs font-bold px-3 py-2 rounded-xl text-white placeholder-emerald-300 focus:outline-none font-sans"
+                    />
+
                     <div className="grid grid-cols-2 gap-2">
                       <select 
                         value={regRole} onChange={e => setRegRole(e.target.value as any)}
@@ -392,8 +428,12 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
 
                     {authError && <p className="text-[9px] text-red-300 font-bold text-center bg-red-950/40 p-1.5 rounded-lg border border-red-900/50">{authError}</p>}
 
-                    <button type="submit" className="w-full bg-white hover:bg-emerald-100 text-emerald-950 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer shadow-md">
-                      Register My Account
+                    <button type="submit" disabled={isRegisteringUser} className="w-full bg-white hover:bg-emerald-100 text-emerald-950 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer shadow-md flex items-center justify-center">
+                      {isRegisteringUser ? (
+                        <span className="w-4 h-4 border-2 border-emerald-950 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        "Register My Account"
+                      )}
                     </button>
                     <button type="button" onClick={() => { setIsRegistering(false); setAuthError(''); }} className="w-full text-white/75 hover:text-white text-[10px] font-bold py-1">
                       Return to Sign In
@@ -418,8 +458,12 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
 
                     {authError && <p className="text-[9px] text-red-300 font-bold text-center bg-red-950/40 p-1.5 rounded-lg border border-red-900/50">{authError}</p>}
 
-                    <button type="submit" className="w-full bg-white hover:bg-emerald-100 text-emerald-950 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer shadow-md">
-                      Log In to System
+                    <button type="submit" disabled={isLoggingIn} className="w-full bg-white hover:bg-emerald-100 text-emerald-950 font-extrabold text-xs py-2.5 rounded-xl cursor-pointer shadow-md flex items-center justify-center">
+                      {isLoggingIn ? (
+                        <span className="w-4 h-4 border-2 border-emerald-950 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        "Log In to System"
+                      )}
                     </button>
                     <button type="button" onClick={() => { setIsRegistering(true); setAuthError(''); }} className="w-full text-white/75 hover:text-white text-[10px] font-bold py-1">
                       Create a staff/student account
