@@ -82,6 +82,72 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
     return true;
   });
 
+  // Find the next upcoming lecture based on current time/day or the nearest scheduled slot
+  const getNextLecture = () => {
+    if (userTimetable.length === 0) return null;
+    
+    const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const now = new Date();
+    
+    // Convert current day name (Monday is 0, Sunday is 6)
+    const currentDayIndex = (now.getDay() + 6) % 7;
+    const currentDayName = daysOrder[currentDayIndex];
+    
+    const timeToMinutes = (timeStr: string) => {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    };
+    
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    
+    // 1. Try to find any remaining lecture today
+    const lecturesToday = userTimetable.filter(slot => slot.day === currentDayName);
+    const upcomingToday = lecturesToday
+      .filter(slot => timeToMinutes(slot.startTime) > currentMinutes)
+      .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+      
+    if (upcomingToday.length > 0) {
+      return upcomingToday[0];
+    }
+    
+    // 2. Otherwise find the earliest lecture on subsequent days (sorted chronologically starting from tomorrow)
+    const sortedLectures = [...userTimetable].sort((a, b) => {
+      const dayIndexA = daysOrder.indexOf(a.day);
+      const dayIndexB = daysOrder.indexOf(b.day);
+      
+      const diffA = (dayIndexA - currentDayIndex + 7) % 7;
+      const diffB = (dayIndexB - currentDayIndex + 7) % 7;
+      
+      if (diffA !== diffB) {
+        return diffA - diffB;
+      }
+      return timeToMinutes(a.startTime) - timeToMinutes(b.startTime);
+    });
+    
+    return sortedLectures[0] || null;
+  };
+
+  const nextLecture = getNextLecture();
+
+  const getNextLectureLabel = (slot: TimetableSlot) => {
+    const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const now = new Date();
+    const currentDayIndex = (now.getDay() + 6) % 7;
+    const currentDayName = daysOrder[currentDayIndex];
+    
+    if (slot.day === currentDayName) {
+      const [sh, sm] = slot.startTime.split(':').map(Number);
+      const startMinutes = sh * 60 + sm;
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const diff = startMinutes - currentMinutes;
+      if (diff > 0 && diff <= 60) {
+        return `Starts in ${diff}m`;
+      }
+      return `Starts today at ${slot.startTime}`;
+    }
+    return `Starts ${slot.day} at ${slot.startTime}`;
+  };
+
   // Handle Login Inside Mobile Frame
   const handleMobileLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -376,12 +442,55 @@ export const MobileSimulator: React.FC<MobileSimulatorProps> = ({
                       {/* Greeting Header & Status Bar */}
                       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                         <div>
-                          <span className="text-[10px] text-slate-400 font-bold uppercase block tracking-wider">Welcome student</span>
+                          <span className="text-[10px] text-slate-400 font-bold uppercase block tracking-wider">Welcome {activeUser.role}</span>
                           <span className="text-xs font-extrabold text-slate-800 block line-clamp-1">{activeUser.name}</span>
                         </div>
                         <button onClick={onLogout} className="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[8px] px-2 py-1 rounded-lg">
                           Logout
                         </button>
+                      </div>
+
+                      {/* Next Lecture Widget Section */}
+                      <div className="space-y-2">
+                        <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Next Lecture Widget</span>
+                        {nextLecture ? (
+                          <div className="bg-emerald-950 text-white p-3.5 rounded-2xl shadow-md border border-emerald-800 space-y-2.5 relative overflow-hidden">
+                            {/* Decorative background shape */}
+                            <div className="absolute right-[-15px] bottom-[-15px] w-20 h-20 bg-emerald-800 rounded-full opacity-35" />
+                            
+                            <div className="flex justify-between items-start relative z-10">
+                              <div className="space-y-0.5">
+                                <span className="bg-white/20 text-white font-extrabold text-[9px] px-2 py-0.5 rounded-md font-mono uppercase tracking-wider">
+                                  {nextLecture.courseCode}
+                                </span>
+                                <h4 className="text-[11px] font-black text-white leading-tight mt-1">{nextLecture.courseTitle}</h4>
+                              </div>
+                              <span className="bg-amber-500 text-neutral-950 text-[8px] font-extrabold px-1.5 py-0.5 rounded-md font-sans">
+                                {getNextLectureLabel(nextLecture)}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-1.5 text-[9px] text-emerald-200 font-semibold pt-1.5 border-t border-white/10 relative z-10">
+                              <div className="flex items-center">
+                                <MapPin className="w-3 h-3 text-emerald-300 mr-1" />
+                                <span className="truncate">{nextLecture.venueName}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Clock className="w-3 h-3 text-emerald-300 mr-1" />
+                                <span>{nextLecture.startTime} - {nextLecture.endTime}</span>
+                              </div>
+                              <div className="flex items-center col-span-2 mt-0.5">
+                                <User className="w-3 h-3 text-emerald-300 mr-1" />
+                                <span className="truncate">Lec: {nextLecture.lecturerName}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="bg-slate-100 border border-slate-200 p-4 rounded-xl text-center text-slate-400">
+                            <Clock className="w-5 h-5 mx-auto text-slate-300 mb-1" />
+                            <p className="text-[10px] font-bold">No upcoming lectures found.</p>
+                          </div>
+                        )}
                       </div>
 
                       {/* Announcement Highlight Banner */}
